@@ -44,13 +44,15 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	 */
     public void enqueuePlaylist(String pName) {
     	assert pName != null;
-    	if (aItems.containsKey(pName)) {
+    	if (aPlaylists.containsKey(pName)) {
     		for (Playlistable item : aPlaylists.get(pName)) {
-				if (item instanceof Song) {
-					addItemToQueue(((Song) item).getName());
-				} else if (item instanceof Playlist) {
-					enqueuePlaylist(((Playlist) item).getName());
-				}
+    			try {
+					if (item instanceof Song) {
+						addItemToQueue(((Song) item).getName());
+					} else if (item instanceof Playlist) {
+						enqueuePlaylist(((Playlist) item).getName());
+					}
+				} catch (NullPointerException e) {}
 			}
 		}
 	}
@@ -91,7 +93,7 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	public class ShuffledPlay implements PlayOrder {
 
 		int aIndex;
-		List<Integer> aIndexList;
+		List<Integer> aIndexList = new ArrayList<>();
 
 		public ShuffledPlay() {
 			fillAndShuffle();
@@ -170,7 +172,9 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		assert pItemName!= null;
 		if (aItems.containsKey(pItemName)) {
 			aQueue.add(aItems.get(pItemName));
-			aPlayOrder.update();
+			try {
+				aPlayOrder.update();
+			} catch(NullPointerException e) {}
 		}
 	}
 

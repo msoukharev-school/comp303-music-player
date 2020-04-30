@@ -39,18 +39,32 @@ public class HomeEntertainmentSystem {
 
         kitchenMusicPlayer.addSongToPlaylist("not_in_the_pool","pl");
 
-        kitchenMusicPlayer.enqueuePlaylist("pl1");
+        kitchenMusicPlayer.enqueuePlaylist("pl");
 
-        kitchenMusicPlayer.setupPlayOrder(kitchenMusicPlayer.new Ord);
+        kitchenMusicPlayer.setupPlayOrder(kitchenMusicPlayer.new OrderedPlay());
+
+        System.out.println("------- Songs will be played in order -------");
 
         Controller remote = new RemoteController(kitchenMusicPlayer);
-        Controller voice = new RemoteController(kitchenMusicPlayer);
+        Controller voice = new VoiceController(kitchenMusicPlayer);
 
-        Controller myController = remote;
+        Controller controller = remote;
 
-        while(true) {
-            if ()
-            myController.next();
+        controller.next();
+        controller.next();
+        controller.next();
+
+        System.out.println("------- I am going to use voice control now -------");
+        controller = voice;
+
+        controller.next();
+        controller.next();
+        controller.next();
+
+        kitchenMusicPlayer.setupPlayOrder(kitchenMusicPlayer.new ShuffledPlay());
+        System.out.println("------- I am going to switch to the shuffle order now -------");
+        for(int i = 0; i < 10; i++) {
+            controller.next();
         }
 
     }
