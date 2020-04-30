@@ -4,7 +4,7 @@ import java.util.*;
  * A class representing a Music Player App.
  * It contains a pool of songs that allow the user to traverse and add to the queue to play.
  */
-public class MusicPlayer implements Iterable<Song> {
+public class MusicPlayer implements Iterable<Song>, Device {
 
 	/**
 	 * 2.1
@@ -20,16 +20,24 @@ public class MusicPlayer implements Iterable<Song> {
 	 */
 	private Map<String, Playlist> aPlaylists = new LinkedHashMap<>();
 
-    public Playlist createPlaylist(String pName) {
+    public void createPlaylist(String pName) {
     	assert pName != null;
-    	return aPlaylists.putIfAbsent(pName, new Playlist(pName));
+    	aPlaylists.putIfAbsent(pName, new Playlist(pName));
 	}
 
-	public Playlist getPlaylist(String pName) {
-    	assert pName != null;
-    	return aPlaylists.get(aPlaylists.get(pName));
+	public void addSongToPlaylist(String pSongName, String pPlaylistName) {
+    	assert pSongName != null && pPlaylistName != null;
+    	if (aItems.containsKey(pSongName) && aPlaylists.containsKey(pPlaylistName)) {
+			aPlaylists.get(pPlaylistName).add(aItems.get(pSongName));
+		}
 	}
 
+	public void addPlaylistToPlaylist(String pPlaylist, String pDestinationPlaylist) {
+    	assert pPlaylist != null && pDestinationPlaylist != null;
+    	if (aPlaylists.containsKey(pPlaylist) && aPlaylists.containsKey(pDestinationPlaylist)) {
+			aPlaylists.get(pDestinationPlaylist).add(aPlaylists.get(pPlaylist));
+		}
+	}
 	/**
 	 * 2.3
 	 * @param pName
@@ -50,7 +58,7 @@ public class MusicPlayer implements Iterable<Song> {
 	/**
 	 * 3.1
 	 */
-	PlayOrder aPlayOrder;
+	private PlayOrder aPlayOrder;
 
 	public class OrderedPlay implements PlayOrder {
 
@@ -125,7 +133,17 @@ public class MusicPlayer implements Iterable<Song> {
 	}
 
 
-
+	/**
+	 * 4.1
+	 */
+	@Override
+	public void next() {
+		try{
+			System.out.println("Now playing: " + aQueue.get(aPlayOrder.getNext()).toString());
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("END OF QUEUE");
+		}
+	}
 
     /*---------------------------- PROVIDED CODE ---------------------------------------*/
    private Map<String, Song> aItems = new LinkedHashMap<>(); // Make sure a predictable iteration order.

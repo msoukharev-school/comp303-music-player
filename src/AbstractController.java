@@ -1,4 +1,13 @@
-package PACKAGE_NAME;
+public abstract class AbstractController implements Controller {
 
-public class AbstractController {
+    private Device aPairedDevice;
+
+    public AbstractController (Device pDevice) {
+        aPairedDevice = pDevice;
+    }
+
+    public void next() {
+        aPairedDevice.next();
+    }
+
 }

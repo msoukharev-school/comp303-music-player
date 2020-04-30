@@ -1,4 +1,11 @@
 public class Song implements Playlistable {
+
+    @Override
+    public String toString() {
+        return aName + " " + "by" + " " + aArtist;
+    }
+
+    /*----------------- PROVIDED CODE -------------------*/
     private final String aName;
     private final String aArtist;
     private final int aLength;
@@ -22,4 +29,5 @@ public class Song implements Playlistable {
     public int getLength() {
         return aLength;
     }
+
 }

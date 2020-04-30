@@ -1,4 +1,9 @@
-package PACKAGE_NAME;
+public class RemoteController extends AbstractController {
 
-public class RemoteController {
+    private Device pDevice;
+
+    public RemoteController(Device pDevice) {
+        super(pDevice);
+    }
+
 }

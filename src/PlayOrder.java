@@ -17,5 +17,5 @@ public interface PlayOrder {
     /**
      * Callback function to indicate change in the queue
      */
-    void update();
+    void update() throws IndexOutOfBoundsException;
 }
