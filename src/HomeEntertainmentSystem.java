@@ -49,6 +49,7 @@ public class HomeEntertainmentSystem {
         Controller voice = new VoiceController(kitchenMusicPlayer);
 
         Controller controller = remote;
+        System.out.println("------- I am using the remote control -------");
 
         controller.next();
         controller.next();
@@ -57,8 +58,6 @@ public class HomeEntertainmentSystem {
         System.out.println("------- I am going to use voice control now -------");
         controller = voice;
 
-        controller.next();
-        controller.next();
         controller.next();
 
         kitchenMusicPlayer.setupPlayOrder(kitchenMusicPlayer.new ShuffledPlay());

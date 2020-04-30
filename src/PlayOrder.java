@@ -7,7 +7,7 @@ public interface PlayOrder {
      * based on the specific traversing method.
      * @return the index of the next element in the collection
      */
-    int getNext();
+    int getNext() throws IndexOutOfBoundsException;
     /**
      * Check if all element in the collection has been traversed.
      * @return true if the collection has more element to traverse
@@ -17,5 +17,5 @@ public interface PlayOrder {
     /**
      * Callback function to indicate change in the queue
      */
-    void update() throws IndexOutOfBoundsException;
+    void update() throws NullPointerException;
 }

@@ -8,7 +8,7 @@ public class MusicPlayer implements Iterable<Song>, Device {
 
 	/**
 	 * 2.1
-	 * @return
+	 * @return iterator over Song objects stored in aItems
 	 */
     @Override
     public Iterator<Song> iterator() {
@@ -20,11 +20,24 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	 */
 	private Map<String, Playlist> aPlaylists = new LinkedHashMap<>();
 
+	/**
+	 * 2.2
+	 * Creates a playlist with a given name and stores it in the music player app
+	 * @param pName name of the new playlist
+	 * @pre pName != null
+	 */
     public void createPlaylist(String pName) {
     	assert pName != null;
     	aPlaylists.putIfAbsent(pName, new Playlist(pName));
 	}
 
+	/**
+	 * 2.2
+	 * Adds a song to a playlist if both exist in the music player app
+	 * @param pSongName name of the song to add
+	 * @param pPlaylistName name of the playlist to store the song in
+	 * @pre pSongName != null and pPlaylistName != null
+	 */
 	public void addSongToPlaylist(String pSongName, String pPlaylistName) {
     	assert pSongName != null && pPlaylistName != null;
     	if (aItems.containsKey(pSongName) && aPlaylists.containsKey(pPlaylistName)) {
@@ -32,15 +45,26 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		}
 	}
 
+	/**
+	 * 2.2
+	 * Adds a playlist to a playlist if both exist in the music player app
+	 * @param pPlaylist name of the playlist to add (nested playlist)
+	 * @param pDestinationPlaylist name of the nesting playlist
+	 * @pre pPlaylist != null and pDestinationPlaylist != null
+	 */
+
 	public void addPlaylistToPlaylist(String pPlaylist, String pDestinationPlaylist) {
     	assert pPlaylist != null && pDestinationPlaylist != null;
     	if (aPlaylists.containsKey(pPlaylist) && aPlaylists.containsKey(pDestinationPlaylist)) {
 			aPlaylists.get(pDestinationPlaylist).add(aPlaylists.get(pPlaylist));
 		}
 	}
+
 	/**
 	 * 2.3
-	 * @param pName
+	 * Adds a playlist to the player queue, if exists
+	 * @param pName name of the playlist to add to a queue
+	 * @pre pName != null
 	 */
     public void enqueuePlaylist(String pName) {
     	assert pName != null;
@@ -57,11 +81,12 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		}
 	}
 
-	/**
-	 * 3.1
-	 */
 	private PlayOrder aPlayOrder;
 
+	/**
+	 * OrderedPlay is a play order where songs in the queue are
+	 * traversed in a natural order
+	 */
 	public class OrderedPlay implements PlayOrder {
 
 		int aIndex = 0;
@@ -90,6 +115,10 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		}
 	}
 
+	/**
+	 * ShuffledPlay is a play ordered where the songs in a queue
+	 * are traversed in a non-repeating pseudo-random order
+	 */
 	public class ShuffledPlay implements PlayOrder {
 
 		int aIndex;
@@ -129,6 +158,8 @@ public class MusicPlayer implements Iterable<Song>, Device {
 
 	/**
 	 * 3.2
+	 * Sets up the play order of the music player app
+	 * @param pPlayOrder a PlayOrder class implementing the queue traversal strategy
 	 */
 	public void setupPlayOrder(PlayOrder pPlayOrder) {
 		aPlayOrder = pPlayOrder;
@@ -137,6 +168,7 @@ public class MusicPlayer implements Iterable<Song>, Device {
 
 	/**
 	 * 4.1
+	 * Plays the next song in the queue depending on the current aPlayOrder type: OrderedPlay or ShuffledPlay
 	 */
 	@Override
 	public void next() {
@@ -187,7 +219,9 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		assert pItemName != null;
 		if (aItems.containsKey(pItemName)) {
 			if (aQueue.remove(aItems.get(pItemName)))
-				aPlayOrder.update();
+				try {
+					aPlayOrder.update();
+				} catch(NullPointerException e) {}
 		}
 	}
 

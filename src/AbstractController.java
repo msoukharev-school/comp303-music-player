@@ -6,6 +6,9 @@ public abstract class AbstractController implements Controller {
         aPairedDevice = pDevice;
     }
 
+    /**
+     * invokes next() method of the paired device
+     */
     public void next() {
         aPairedDevice.next();
     }
