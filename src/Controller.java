@@ -1,11 +1,10 @@
 /**
- * An interface representing the user command when
- * interacting with the home entertainment system
+ * Interface Controller is defined for a multimedia controller
+ * A controller can traverse the device item sequence in one direction.
  */
 public interface Controller {
     /**
-     * Move to the next content
+     * Move to the next item in the sequence
      */
     void next();
-
 }

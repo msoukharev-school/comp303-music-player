@@ -1,3 +1,6 @@
+/**
+ * Class VoiceController emulates a voice controller (poorly so, due to obvious contstraints of the course)
+ */
 public class VoiceController extends AbstractController {
 
     public VoiceController(Device pDevice) {

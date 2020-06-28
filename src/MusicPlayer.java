@@ -3,12 +3,23 @@ import java.util.*;
 /**
  * A class representing a Music Player App.
  * It contains a pool of songs that allow the user to traverse and add to the queue to play.
+ * Songs and playlists can be accessed and manipulated by their name identifier.
+ * The client NEVER holds a reference to a song or a playlist.
  */
 public class MusicPlayer implements Iterable<Song>, Device {
 
+	private Map<String, Song> aItems = new LinkedHashMap<>(); //Predictable order of iteration
+	private Queue aQueue = new Queue();
+	private Map<String, Playlist> aPlaylists = new LinkedHashMap<>(); //stores playlists by their name identifiers
 	/**
-	 * 2.1
-	 * @return iterator over Song objects stored in aItems
+	 * PlayOrder holds a STRATEGY for traversing a queue
+	 * Examples: order in which elements were added, shuffled order, etc.
+	 */
+	private PlayOrder aPlayOrder;
+	public MusicPlayer(){}
+
+	/**
+	 * Allows iterating over the entire song library of the music player
 	 */
     @Override
     public Iterator<Song> iterator() {
@@ -16,12 +27,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
     }
 
 	/**
-	 * 2.2
-	 */
-	private Map<String, Playlist> aPlaylists = new LinkedHashMap<>();
-
-	/**
-	 * 2.2
 	 * Creates a playlist with a given name and stores it in the music player app
 	 * @param pName name of the new playlist
 	 * @pre pName != null
@@ -32,7 +37,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	}
 
 	/**
-	 * 2.2
 	 * Adds a song to a playlist if both exist in the music player app
 	 * @param pSongName name of the song to add
 	 * @param pPlaylistName name of the playlist to store the song in
@@ -46,7 +50,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	}
 
 	/**
-	 * 2.2
 	 * Adds a playlist to a playlist if both exist in the music player app
 	 * @param pPlaylist name of the playlist to add (nested playlist)
 	 * @param pDestinationPlaylist name of the nesting playlist
@@ -61,7 +64,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	}
 
 	/**
-	 * 2.3
 	 * Adds a playlist to the player queue, if exists
 	 * @param pName name of the playlist to add to a queue
 	 * @pre pName != null
@@ -81,11 +83,9 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		}
 	}
 
-	private PlayOrder aPlayOrder;
-
 	/**
-	 * OrderedPlay is a play order where songs in the queue are
-	 * traversed in a natural order
+	 * Class OrderedPlay is a play order where songs in the queue are
+	 * traversed in the same order the elements were added to the queue
 	 */
 	public class OrderedPlay implements PlayOrder {
 
@@ -116,7 +116,7 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	}
 
 	/**
-	 * ShuffledPlay is a play ordered where the songs in a queue
+	 * Class ShuffledPlay defines a play order where the songs in a queue
 	 * are traversed in a non-repeating pseudo-random order
 	 */
 	public class ShuffledPlay implements PlayOrder {
@@ -157,7 +157,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
 	}
 
 	/**
-	 * 3.2
 	 * Sets up the play order of the music player app
 	 * @param pPlayOrder a PlayOrder class implementing the queue traversal strategy
 	 */
@@ -167,7 +166,6 @@ public class MusicPlayer implements Iterable<Song>, Device {
 
 
 	/**
-	 * 4.1
 	 * Plays the next song in the queue depending on the current aPlayOrder type: OrderedPlay or ShuffledPlay
 	 */
 	@Override
@@ -179,17 +177,11 @@ public class MusicPlayer implements Iterable<Song>, Device {
 		}
 	}
 
-    /*---------------------------- PROVIDED CODE ---------------------------------------*/
-   private Map<String, Song> aItems = new LinkedHashMap<>(); // Make sure a predictable iteration order.
-   private Queue aQueue = new Queue(); //
-
-   MusicPlayer(){}
-
-   /**
-	* Add a single song to the music pool if a song with the same name is not already in the pool.
-	* @param pItem the song to be added in the pool
-	* @pre pItem !=null
-	*/
+	/**
+	 * Add a single song to the music pool if a song with the same name is not already in the pool.
+	 * @param pItem the song to be added in the pool
+	 * @pre pItem !=null
+	 */
 	public void addItem(Song pItem) {
 		assert pItem != null;
 		aItems.putIfAbsent(pItem.getName(), pItem);

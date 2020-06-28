@@ -1,5 +1,5 @@
 /**
- * Interface to specify the order of traversing the element in a collection
+ * Interface PlayOrder specifies the order of traversing the element in a collection
  */
 public interface PlayOrder {
     /**
